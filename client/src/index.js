@@ -4,17 +4,37 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RegisterPage from "./components/auth/RegisterPage";
 import LoginPage from "./components/auth/LoginPage";
 import "./index.css";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
 import { Provider } from "react-redux";
-import store from "./app/store";
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from 'redux-persist/lib/storage';
+// import store from "./app/store";
+import rootReducer from "./app/reducers/index.js";
 import AlertNotification from "./shared/components/AlertNotification";
 import HomePage from "./components/home/HomePage";
 import Cart from "./components/cart/Cart";
 import Wallet from "./components/wallet/Wallet";
-import SellerHomePage from "./components/seller/homeSeller/SellerHomePage";
 import SellerRegisterPage from "./components/seller/auth/SellerRegisterPage";
 import SellerLoginPage from "./components/seller/auth/SellerLoginPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = configureStore(
+  {
+    reducer: persistedReducer,
+  },
+  composeWithDevTools(applyMiddleware(thunk))
+);
+const persistor = persistStore(store)
 
 const router = createBrowserRouter([
   {
@@ -42,10 +62,6 @@ const router = createBrowserRouter([
     element: <Wallet />,
   },
   {
-    path: "/seller/home",
-    element: <SellerHomePage />,
-  },
-  {
     path: "/seller/register",
     element: <SellerRegisterPage />,
   },
@@ -57,7 +73,9 @@ const router = createBrowserRouter([
 
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router}></RouterProvider>
-    <AlertNotification />
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router}></RouterProvider>
+      <AlertNotification />
+    </PersistGate>
   </Provider>
 );

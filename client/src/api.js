@@ -66,6 +66,17 @@ export const sellerRegister = async (data) => {
   }
 };
 
+export const getAllProducts = async (data) => {
+  try {
+    return await apiClient.post("/auth/", data);
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
 const checkResponseCode = (exception) => {
   const responseCode = exception?.response?.status;
 

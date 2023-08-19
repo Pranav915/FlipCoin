@@ -3,13 +3,14 @@ import HomeNavbar from "./HomeNavbar";
 import OutfitCard from "./OutfitCard";
 import { Box } from "@mui/material";
 import { getMainActions } from "../../app/actions/mainActions";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { logout } from "../../shared/utils/logout";
 import { getAuthActions } from "../../app/actions/authActions";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = ({ setUserDetails }) => {
+const HomePage = () => {
   const navigate = useNavigate();
+  console.log(useSelector((state) => state.user))
   const [outfitList, setOutfitList] = useState([
     {
       outfitId: "",
@@ -52,17 +53,15 @@ const HomePage = ({ setUserDetails }) => {
     if (!userDetails) {
       logout();
     } else if (userDetails.role === "seller") {
-      console.log(userDetails.role);
-      navigate("/seller/home");
+      navigate("/");
     } else {
-      setUserDetails(userDetails);
+      // setCurrentUserDetails(userDetails);
     }
   }, []);
 
   return (
     <>
       <HomeNavbar />
-
       <Box sx={{ mt: 9, display: "flex", flexDirection: "row" }}>
         <Box sx={{ width: "100%" }}>
           {outfitList.map((outfit, i) => (

@@ -9,7 +9,7 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import AccountCircle from "@mui/icons-material/Person";
+import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -17,6 +17,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import WalletIcon from "@mui/icons-material/Wallet";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../shared/utils/logout";
+import { useSelector } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,6 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function HomeNavbar() {
   const navigate = useNavigate();
+  const userinfo = useSelector((state) => state.user);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -84,27 +86,6 @@ export default function HomeNavbar() {
   };
 
   const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={logout}>Logout</MenuItem>
-    </Menu>
-  );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -123,7 +104,7 @@ export default function HomeNavbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem style={{display: userinfo && userinfo.userDetails.role==="seller"?"none":"block"}}>
         <IconButton
           size="large"
           aria-label="show 4 new mails"
@@ -136,7 +117,9 @@ export default function HomeNavbar() {
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p onClick={() => {
+            navigate("/cart");
+          }}>Cart</p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -144,19 +127,19 @@ export default function HomeNavbar() {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge
-            badgeContent={17}
-            color="error"
+          <div
             onClick={() => {
               navigate("/wallet");
             }}
           >
             <WalletIcon />
-          </Badge>
+          </div>
         </IconButton>
-        <p>Notifications</p>
+        <p onClick={() => {
+              navigate("/wallet");
+            }}>Wallet</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={logout}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -164,9 +147,9 @@ export default function HomeNavbar() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <LogoutIcon />
         </IconButton>
-        <p>Profile</p>
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   );
@@ -210,6 +193,7 @@ export default function HomeNavbar() {
               onClick={() => {
                 navigate("/cart");
               }}
+              style={{display: userinfo && userinfo.userDetails.role==="seller"?"none":"block"}}
             >
               <Badge badgeContent={4} color="error">
                 <ShoppingCartIcon />
@@ -223,9 +207,7 @@ export default function HomeNavbar() {
                 navigate("/wallet");
               }}
             >
-              <Badge badgeContent={17} color="error">
-                <WalletIcon />
-              </Badge>
+              <WalletIcon />
             </IconButton>
             <IconButton
               size="large"
@@ -233,10 +215,10 @@ export default function HomeNavbar() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={logout}
               color="inherit"
             >
-              <AccountCircle />
+              <LogoutIcon />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -254,7 +236,6 @@ export default function HomeNavbar() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }

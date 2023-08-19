@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import CartCard from "./CartCard";
 import HomeNavbar from "../home/HomeNavbar";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
+  const userinfo = useSelector((state) => state.user);
+  console.log(userinfo);
   const navigate = useNavigate();
   const [items, setItems] = useState([{
     id: 1,
@@ -63,7 +66,7 @@ const Cart = () => {
             </Box>
           </Grid>
           <Grid item sx={12} lg={4}>
-            <Paper elevation={3} style={{margin: "5px 20px"}}>
+            <Paper elevation={3} style={{margin: "66px 20px"}}>
               <Box sx={{padding: "10px 20px", fontFamily: "Arial, Helvetica, sans-serif" }}>
                 <h2 style={{ color: "#081b8c" }}>Order Details</h2>
                 <table style={{ width: "100%" }}>
