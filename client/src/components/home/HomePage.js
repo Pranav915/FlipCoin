@@ -8,9 +8,9 @@ import { logout } from "../../shared/utils/logout";
 import { getAuthActions } from "../../app/actions/authActions";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+const HomePage = ({getAllProducts}) => {
   const navigate = useNavigate();
-  console.log(useSelector((state) => state.user))
+  console.log(useSelector((state) => state.main.productList))
   const [outfitList, setOutfitList] = useState([
     {
       outfitId: "",
@@ -52,11 +52,9 @@ const HomePage = () => {
     const userDetails = JSON.parse(localStorage.getItem("user"));
     if (!userDetails) {
       logout();
-    } else if (userDetails.role === "seller") {
-      navigate("/");
-    } else {
-      // setCurrentUserDetails(userDetails);
-    }
+    } 
+    getAllProducts();
+    
   }, []);
 
   return (
