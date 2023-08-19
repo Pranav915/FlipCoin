@@ -11,12 +11,14 @@ const SellerHomePage = ({ setUserDetails }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem("user"));
+
     if (!userDetails) {
       logout();
-    } else if (userDetails.role !== "customer") {
-      navigate("/seller/home");
+    } else if (userDetails.role === "customer") {
+      console.log(userDetails);
+      navigate("/home");
     } else {
-      setUserDetails(JSON.parse(userDetails));
+      setUserDetails(userDetails);
     }
   }, []);
 

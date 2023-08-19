@@ -51,10 +51,11 @@ const HomePage = ({ setUserDetails }) => {
     const userDetails = JSON.parse(localStorage.getItem("user"));
     if (!userDetails) {
       logout();
-    } else if (userDetails.role !== "customer") {
+    } else if (userDetails.role === "seller") {
+      console.log(userDetails.role);
       navigate("/seller/home");
     } else {
-      setUserDetails(JSON.parse(userDetails));
+      setUserDetails(userDetails);
     }
   }, []);
 

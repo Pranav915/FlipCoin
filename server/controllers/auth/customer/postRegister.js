@@ -14,9 +14,6 @@ const postRegister = async (req, res) => {
 
     const encryptedPassword = await bcrypt.hash(password, 10);
 
-    const cart = await Cart.create({
-      customer: user,
-    });
     const user = await User.create({
       firstName: firstName,
       lastName: lastName,

@@ -34,6 +34,7 @@ export const login = (userDetails, navigate) => {
       dispatch(openAlertMessage(response?.exception?.response?.data));
     } else {
       const { userDetails } = response?.data;
+      console.log(userDetails);
       localStorage.setItem("user", JSON.stringify(userDetails));
       dispatch(setUserDetails(userDetails));
       navigate("/");
@@ -59,15 +60,13 @@ export const register = (userDetails, navigate) => {
 
 export const sellerLogin = (userDetails, navigate) => {
   return async (dispatch) => {
-    console.log(userDetails);
     const response = await api.sellerLogin(userDetails);
     if (response.error) {
-      console.log("response", response);
       dispatch(openAlertMessage(response?.exception?.response?.data));
     } else {
-      const { userDetails } = response?.data;
-      localStorage.setItem("user", JSON.stringify(userDetails));
-      dispatch(setUserDetails(userDetails));
+      const details = response?.data;
+      localStorage.setItem("user", JSON.stringify(details));
+      dispatch(setUserDetails(details));
       navigate("/seller/home");
     }
   };
