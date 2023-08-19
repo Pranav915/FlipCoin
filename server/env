@@ -1,0 +1,4 @@
+API_PORT=5000
+MONGO_URI=mongodb+srv://Pranav:Pranav2525@cluster0.tzpw1gj.mongodb.net/flipcoin?retryWrites=true&w=majority
+AUTH_TOKEN=howyoudoin?
+LOCALHOST=http://localhost:3000/

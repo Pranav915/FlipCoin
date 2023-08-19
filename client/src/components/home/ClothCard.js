@@ -5,11 +5,11 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Box, IconButton, styled } from "@mui/material";
-import { makeStyles } from "@mui/material";
-import RefreshIcon from "@mui/icons-material/Refresh";
-
-const ClothCard = ({ imgURl, itemId }) => {
+import { Box, Switch, styled } from "@mui/material";
+import { useSelector } from "react-redux";
+const ClothCard = ({ item }) => {
+  const userInfo = useSelector((state) => state.user);
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const useStyles = styled({
     root: {
       maxWidth: 310,
@@ -27,7 +27,7 @@ const ClothCard = ({ imgURl, itemId }) => {
 
   return (
     <Card
-      sx={{ margin: 2, width: 270, height: 300 }}
+      sx={{ margin: 2, width: 270 }}
       classes={{ root: state.raised ? classes.cardHovered : "" }}
       onMouseOver={() => setState({ raised: true, shadow: 3 })}
       onMouseOut={() => setState({ raised: false, shadow: 1 })}
@@ -35,18 +35,23 @@ const ClothCard = ({ imgURl, itemId }) => {
       zdepth={state.shadow}
     >
       <Box>
-        <IconButton sx={{ position: "absolute", color: "white" }}>
-          <RefreshIcon />
-        </IconButton>
         <CardMedia
           component="img"
           alt="green iguana"
           height="260"
-          image={imgURl}
+          image={item.itemImage}
         />
-        <CardActions sx={{ mx: 0 }}>
-          <Button size="small">View Details</Button>
-          <Button size="small">Add to Cart</Button>
+        <CardContent style={{ margin: "0 15px", padding: "0" }}>
+          <table style={{ width: "100%", margin: "auto 5px" }}>
+            <tr>
+              <td><Typography variant="h5">Shirt</Typography></td>
+              <td align="right"><Typography variant="h6">$50</Typography></td>
+            </tr>
+          </table>
+        </CardContent>
+        <CardActions style={{ justifyContent: "center" }}>
+          <Button style={{ display: (userInfo && userInfo.userDetails.role === "seller") ? "none" : "block" }} size="medium" variant="text">Add to Cart</Button>
+          <div style={{ display: (userInfo && userInfo.userDetails.role !== "seller") ? "none" : "flex" }}><Typography>Avail Loyalty Program </Typography><Switch {...label} /></div>
         </CardActions>
       </Box>
     </Card>

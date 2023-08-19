@@ -64,10 +64,10 @@ export const sellerLogin = (userDetails, navigate) => {
     if (response.error) {
       dispatch(openAlertMessage(response?.exception?.response?.data));
     } else {
-      const details = response?.data;
-      localStorage.setItem("user", JSON.stringify(details));
-      dispatch(setUserDetails(details));
-      navigate("/seller/home");
+      const {userDetails} = response?.data;
+      localStorage.setItem("user", JSON.stringify(userDetails));
+      dispatch(setUserDetails(userDetails));
+      navigate("/");
     }
   };
 };
@@ -83,7 +83,7 @@ export const sellerRegister = (userDetails, navigate) => {
       const { userDetails } = response?.data;
       localStorage.setItem("user", JSON.stringify(userDetails));
       dispatch(setUserDetails(userDetails));
-      navigate("/seller/home");
+      navigate("/");
     }
   };
 };
