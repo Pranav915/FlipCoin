@@ -5,7 +5,7 @@ import RegisterPage from "./components/auth/RegisterPage";
 import LoginPage from "./components/auth/LoginPage";
 import "./index.css";
 import EthProvider from "./shared/components/web3Reducer";
-import { ContractProvider } from "./components/ContractContext";
+import { AccountProvider } from "./components/ContractContext";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
@@ -78,11 +78,11 @@ const router = createBrowserRouter([
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <ContractProvider contract={contract}>
-        <EthProvider />
+      <AccountProvider>
+        <EthProvider initialAccount={contract}/>
         <RouterProvider router={router}></RouterProvider>
         <AlertNotification />
-      </ContractProvider>
+      </AccountProvider>
     </PersistGate>
   </Provider>
 );

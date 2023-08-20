@@ -1,18 +1,22 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
-// Create a context
-export const ContractContext = createContext();
+export const AccountContext = createContext();
 
-// AccountProvider component to wrap your components
-export function ContractProvider({ children, contract }) {
+export function AccountProvider({ children }) {
+  const [account, setAccount] = useState('');
+
+  // Function to update account value
+  const updateAccount = (newAccount) => {
+    setAccount(newAccount);
+  };
+
   return (
-    <ContractContext.Provider value={contract}>
+    <AccountContext.Provider value={{ account, updateAccount }}>
       {children}
-    </ContractContext.Provider>
+    </AccountContext.Provider>
   );
 }
 
-// Custom hook to access the account value
-export function useContract() {
-  return useContext(ContractContext);
+export function useAccount() {
+  return useContext(AccountContext);
 }

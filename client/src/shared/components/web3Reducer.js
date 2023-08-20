@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import FlipBank from '../../abis/FlipCoin.json';
-import { getContractActions } from "../../app/actions/contractActions.js";
 import { connect } from 'react-redux';
+import { useAccount } from '../../components/ContractContext';
 
 const EthProvider = ({setContractDetails}) => {
-  const [account, setAccount] = useState('0');
   const [ethBalance, setEthBalance] = useState('0');
   const [coinBalance, setCoinBalance] = useState('0');
-  const [contract, setContract] = useState(null);
+  const { account, updateAccount } = useAccount();
 
   useEffect(() => {
     console.log("hi")
@@ -20,7 +19,7 @@ const EthProvider = ({setContractDetails}) => {
     const web3 = window.web3;
 
     const accounts = await web3.eth.getAccounts();
-    setAccount(accounts[0]); // Use setAccount to update the account state
+    // setAccount(accounts[0]); // Use setAccount to update the account state
 
     const ethBalance = await web3.eth.getBalance(accounts[0]);
     setEthBalance(ethBalance); // Use setEthBalance to update the ethBalance state
@@ -31,10 +30,10 @@ const EthProvider = ({setContractDetails}) => {
     if (contractData) {
       const flipBank = new web3.eth.Contract(FlipBank.abi, contractData.address);
       console.log("flipbank",flipBank);
-      setContractDetails(flipBank)
+      updateAccount(flipBank);
 
       let coinBalance = await flipBank.methods.balanceOf(accounts[0]).call();
-      console.log(account);
+      // console.log(account);
       setCoinBalance(coinBalance.toString()); // Use setCoinBalance to update the coinBalance state
     } else {
       window.alert('Token contract not deployed to detected network.');
@@ -58,9 +57,4 @@ const EthProvider = ({setContractDetails}) => {
   );
 }
 
-const mapActionsToProps = (dispatch) => {
-  return {
-    ...getContractActions(dispatch),
-  };
-};
-export default connect(null, mapActionsToProps)(EthProvider);
+export default EthProvider;
