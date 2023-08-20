@@ -10,7 +10,7 @@ const postAddToCart = async (req, res) => {
     const product = await Product.findById(productId).populate("seller");
     const customer = await Customer.findOne({ _id: customerId });
     const sellerId = product.seller._id;
-
+    console.log(sellerId);
     if (!customer) {
       console.log("Customer not found.");
       return;
@@ -18,8 +18,9 @@ const postAddToCart = async (req, res) => {
 
     // Check if the seller already exists in the cart
     const sellerIndex = customer.cart.findIndex(
-      (item) => item.sellerId === sellerId
+      (item) => item.sellerId === sellerId.toString()
     );
+    console.log("index", sellerIndex);
 
     if (sellerIndex !== -1) {
       // Seller exists, now check if the product already exists for this seller
@@ -61,10 +62,6 @@ const postAddToCart = async (req, res) => {
 
     // Save the updated customer document
     await customer.save();
-
-    console.log("Product added to the cart successfully.");
-
-    console.log("customer", customer);
     return res.status(200).json({ error: false });
   } catch (err) {
     console.log(err);

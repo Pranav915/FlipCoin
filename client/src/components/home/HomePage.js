@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from "react";
 import HomeNavbar from "./HomeNavbar";
 import OutfitCard from "./OutfitCard";
-import PropTypes from 'prop-types';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, Dialog, DialogTitle, Typography, DialogContent, DialogActions, TextField, Grid, Tooltip, Paper } from "@mui/material";
-import { styled } from '@mui/material/styles';
-import { getMainActions } from "../../app/actions/mainActions";
+import PropTypes from "prop-types";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  Typography,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Grid,
+  Tooltip,
+  Paper,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { getMainActions, setProductList } from "../../app/actions/mainActions";
 import { connect, useSelector } from "react-redux";
 import { logout } from "../../shared/utils/logout";
 import { getAuthActions } from "../../app/actions/authActions";
 import { useNavigate } from "react-router-dom";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
-  '& .MuiDialogActions-root': {
+  "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
 }));
@@ -32,7 +44,7 @@ function BootstrapDialogTitle(props) {
           aria-label="close"
           onClick={onClose}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -50,8 +62,14 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const HomePage = ({ getAllProducts }) => {
+const HomePage = ({
+  getAllProducts,
+  addNewProduct,
+  getSellerProducts,
+  availLoyaltyProgram,
+}) => {
   const navigate = useNavigate();
+  const productList = useSelector((state) => state.main.productList);
   const [user, setUser] = useState({});
   const [open, setOpen] = useState(false);
   const [openProduct, setOpenProduct] = useState(false);
@@ -71,12 +89,12 @@ const HomePage = ({ getAllProducts }) => {
     offerRate: "",
     offerCap: "",
     recieveRate: "",
-    recieveCap: ""
+    recieveCap: "",
   });
 
   const handleCloseBuy = () => {
     setOpenBuy(false);
-  }
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -91,29 +109,29 @@ const HomePage = ({ getAllProducts }) => {
     setOpen(true);
   };
   const handleClose = (event, reason) => {
-    if (reason && reason === "backdropClick")
-      return;
+    if (reason && reason === "backdropClick") return;
     setOpen(false);
-  }
+  };
   const handleProductClickOpen = () => {
     setOpenProduct(true);
   };
   const handleProductClose = (event, reason) => {
-    if (reason && reason === "backdropClick")
-      return;
+    if (reason && reason === "backdropClick") return;
     setOpenProduct(false);
-  }
+  };
 
   const handleLoyaltySubmit = () => {
     console.log(loyaltyData);
+    availLoyaltyProgram();
     setLoyaltyData({
       offerRate: "",
       offerCap: "",
       recieveCap: "",
-      offerRate: ""
+      offerRate: "",
     });
+
     setOpen(false);
-  }
+  };
 
   const uploadImage = async () => {
     const data = new FormData();
@@ -138,50 +156,21 @@ const HomePage = ({ getAllProducts }) => {
 
   useEffect(() => {
     if (formdata.photo !== "") {
+      const data = {
+        imgUrl: formdata.photo,
+        name: formdata.name,
+        price: formdata.price,
+      };
+      addNewProduct(data);
       setOpenProduct(false);
       setProductName("");
       setProductPrice(null);
       setSelectedFile(null);
     }
-  }, [formdata.photo])
+  }, [formdata.photo]);
 
   // console.log(useSelector((state) => state.main.productList))
-  const [outfitList, setOutfitList] = useState([
-    {
-      outfitId: "",
-      items: [
-        {
-          itemId: "",
-          itemImage: "https://source.unsplash.com/random",
-        },
-        {
-          itemId: "",
-          itemImage: "https://source.unsplash.com/random",
-        },
-        {
-          itemId: "",
-          itemImage: "https://source.unsplash.com/random",
-        },
-      ],
-    },
-    {
-      outfitId: "",
-      items: [
-        {
-          itemId: "",
-          itemImage: "https://source.unsplash.com/random",
-        },
-        {
-          itemId: "",
-          itemImage: "https://source.unsplash.com/random",
-        },
-        {
-          itemId: "",
-          itemImage: "https://source.unsplash.com/random",
-        },
-      ],
-    },
-  ]);
+  const [outfitList, setOutfitList] = useState([]);
 
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem("user"));
@@ -189,80 +178,230 @@ const HomePage = ({ getAllProducts }) => {
       logout();
     }
     setUser(userDetails);
-    getAllProducts();
-
+    if (userDetails.role === "seller") {
+      getSellerProducts();
+    } else {
+      getAllProducts();
+    }
+    setOutfitList(productList);
   }, []);
 
   return (
     <>
       <HomeNavbar />
-      <Box sx={{ mt: 10, width: "100%", display: user && user.role === "seller" ? "flex" : "none", justifyContent: "center" }}>
-        <Button variant="contained" color="success" sx={{ mr: 5 }} onClick={() => setOpenBuy(true)}>Buy / Sell Coins</Button>
+      <Box
+        sx={{
+          mt: 10,
+          width: "100%",
+          display: user && user.role === "seller" ? "flex" : "none",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ mr: 5 }}
+          onClick={() => setOpenBuy(true)}
+        >
+          Buy / Sell Coins
+        </Button>
         <BootstrapDialog
           onClose={handleCloseBuy}
           aria-labelledby="customized-dialog-title"
           open={openBuy}
         >
-          <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseBuy}>
+          <BootstrapDialogTitle
+            id="customized-dialog-title"
+            onClose={handleCloseBuy}
+          >
             Buy / Sell Coins
           </BootstrapDialogTitle>
           <DialogContent dividers>
             <Grid container>
               <Grid item sx={{ mr: 2 }}>
-                <Paper elevation={2} sx={{padding: "20px"}}>
-                  <Typography variant="body1" sx={{ mb: 2 }}>Current Exchange rate is: 1000</Typography>
-                  <TextField id="outlined-basic" disabled={sellValue} sx={{ mb: 2 }} value={buyValue} onChange={(e) => { setBuyValue(e.target.value); setEtherValue(e.target.value / 1000); }} label={etherValue ? "" : "Number of Coins"} variant="outlined" /><br />
-                  <TextField id="outlined-basic" disabled={sellValue} value={etherValue} onChange={(e) => { setEtherValue(e.target.value); setBuyValue(e.target.value * 1000) }} label={buyValue ? "" : "Number of ethers"} variant="outlined" />
-                  <Typography variant="body1" sx={{ mt: 2 }}>Total Payable amount: {etherValue}</Typography>
-                  <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}><Button autoFocus variant="contained" onClick={handleLoyaltySubmit}>
-                    Buy
-                  </Button></div>
+                <Paper elevation={2} sx={{ padding: "20px" }}>
+                  <Typography variant="body1" sx={{ mb: 2 }}>
+                    Current Exchange rate is: 1000
+                  </Typography>
+                  <TextField
+                    id="outlined-basic"
+                    disabled={sellValue}
+                    sx={{ mb: 2 }}
+                    value={buyValue}
+                    onChange={(e) => {
+                      setBuyValue(e.target.value);
+                      setEtherValue(e.target.value / 1000);
+                    }}
+                    label={etherValue ? "" : "Number of Coins"}
+                    variant="outlined"
+                  />
+                  <br />
+                  <TextField
+                    id="outlined-basic"
+                    disabled={sellValue}
+                    value={etherValue}
+                    onChange={(e) => {
+                      setEtherValue(e.target.value);
+                      setBuyValue(e.target.value * 1000);
+                    }}
+                    label={buyValue ? "" : "Number of ethers"}
+                    variant="outlined"
+                  />
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    Total Payable amount: {etherValue}
+                  </Typography>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <Button
+                      autoFocus
+                      variant="contained"
+                      onClick={handleLoyaltySubmit}
+                    >
+                      Buy
+                    </Button>
+                  </div>
                 </Paper>
               </Grid>
               <Grid item sx={{ mr: 2 }}>
-                <Paper elevation={2} sx={{padding: "20px"}}>
-                  <Typography variant="body1" sx={{ mb: 2 }}>Current Selling rate is: 2</Typography>
-                  <TextField id="outlined-basic" disabled={buyValue} value={sellValue} onChange={(e) => setSellValue(e.target.value)} label="Number of Coins" variant="outlined" />
-                  <Typography variant="body1" sx={{ mt: 2 }}>Total value: {sellValue * 2}</Typography>
-                  <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}><Button autoFocus variant="contained" onClick={handleLoyaltySubmit}>
-                    Sell
-                  </Button></div>
+                <Paper elevation={2} sx={{ padding: "20px" }}>
+                  <Typography variant="body1" sx={{ mb: 2 }}>
+                    Current Selling rate is: 2
+                  </Typography>
+                  <TextField
+                    id="outlined-basic"
+                    disabled={buyValue}
+                    value={sellValue}
+                    onChange={(e) => setSellValue(e.target.value)}
+                    label="Number of Coins"
+                    variant="outlined"
+                  />
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    Total value: {sellValue * 2}
+                  </Typography>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <Button
+                      autoFocus
+                      variant="contained"
+                      onClick={handleLoyaltySubmit}
+                    >
+                      Sell
+                    </Button>
+                  </div>
                 </Paper>
               </Grid>
             </Grid>
           </DialogContent>
         </BootstrapDialog>
-        <Button variant="contained" color="success" sx={{ mr: 5 }} onClick={handleClickOpen}>Avail Loalty Program</Button>
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ mr: 5 }}
+          onClick={handleClickOpen}
+        >
+          Avail Loalty Program
+        </Button>
         <BootstrapDialog
           onClose={handleClose}
           aria-labelledby="customized-dialog-title"
           open={open}
         >
-          <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+          <BootstrapDialogTitle
+            id="customized-dialog-title"
+            onClose={handleClose}
+          >
             Enroll in Loyalty Program
           </BootstrapDialogTitle>
           <DialogContent dividers>
             <Grid container sx={{ mb: 2 }}>
               <Grid item>
-                <Tooltip title="Coins recieved by user on per Rs.100 purchase" placement="top-start">
-                  <TextField id="outlined-basic" value={loyaltyData.offerRate} onChange={(e) => setLoyaltyData({ ...loyaltyData, offerRate: e.target.value })} sx={{ mr: 5 }} label="Offer Rate" variant="outlined" />
+                <Tooltip
+                  title="Coins recieved by user on per Rs.100 purchase"
+                  placement="top-start"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    value={loyaltyData.offerRate}
+                    onChange={(e) =>
+                      setLoyaltyData({
+                        ...loyaltyData,
+                        offerRate: e.target.value,
+                      })
+                    }
+                    sx={{ mr: 5 }}
+                    label="Offer Rate"
+                    variant="outlined"
+                  />
                 </Tooltip>
               </Grid>
               <Grid item>
-                <Tooltip title="Max. coins rewarded per order" placement="top-start">
-                  <TextField id="outlined-basic" value={loyaltyData.offerCap} onChange={(e) => setLoyaltyData({ ...loyaltyData, offerCap: e.target.value })} label="Offer Cap" variant="outlined" />
+                <Tooltip
+                  title="Max. coins rewarded per order"
+                  placement="top-start"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    value={loyaltyData.offerCap}
+                    onChange={(e) =>
+                      setLoyaltyData({
+                        ...loyaltyData,
+                        offerCap: e.target.value,
+                      })
+                    }
+                    label="Offer Cap"
+                    variant="outlined"
+                  />
                 </Tooltip>
               </Grid>
             </Grid>
             <Grid container>
               <Grid item>
-                <Tooltip title="coin value on redemption" placement="bottom-end">
-                  <TextField id="outlined-basic" value={loyaltyData.recieveRate} onChange={(e) => setLoyaltyData({ ...loyaltyData, recieveRate: e.target.value })} sx={{ mr: 5 }} label="Recieve Rate" variant="outlined" />
+                <Tooltip
+                  title="coin value on redemption"
+                  placement="bottom-end"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    value={loyaltyData.recieveRate}
+                    onChange={(e) =>
+                      setLoyaltyData({
+                        ...loyaltyData,
+                        recieveRate: e.target.value,
+                      })
+                    }
+                    sx={{ mr: 5 }}
+                    label="Recieve Rate"
+                    variant="outlined"
+                  />
                 </Tooltip>
               </Grid>
               <Grid item>
-                <Tooltip title="max. coin value on redemption" placement="bottom-end">
-                  <TextField id="outlined-basic" value={loyaltyData.recieveCap} onChange={(e) => setLoyaltyData({ ...loyaltyData, recieveCap: e.target.value })} label="Recieve Cap" variant="outlined" />
+                <Tooltip
+                  title="max. coin value on redemption"
+                  placement="bottom-end"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    value={loyaltyData.recieveCap}
+                    onChange={(e) =>
+                      setLoyaltyData({
+                        ...loyaltyData,
+                        recieveCap: e.target.value,
+                      })
+                    }
+                    label="Recieve Cap"
+                    variant="outlined"
+                  />
                 </Tooltip>
               </Grid>
             </Grid>
@@ -273,13 +412,23 @@ const HomePage = ({ getAllProducts }) => {
             </Button>
           </DialogActions>
         </BootstrapDialog>
-        <Button variant="outlined" color="success" onClick={handleProductClickOpen} sx={{ ml: 4 }}>Add Product</Button>
+        <Button
+          variant="outlined"
+          color="success"
+          onClick={handleProductClickOpen}
+          sx={{ ml: 4 }}
+        >
+          Add Product
+        </Button>
         <BootstrapDialog
           onClose={handleProductClose}
           aria-labelledby="customized-dialog-title"
           open={openProduct}
         >
-          <BootstrapDialogTitle id="customized-dialog-title" onClose={handleProductClose}>
+          <BootstrapDialogTitle
+            id="customized-dialog-title"
+            onClose={handleProductClose}
+          >
             Register a product
           </BootstrapDialogTitle>
           <DialogContent dividers>
@@ -289,11 +438,16 @@ const HomePage = ({ getAllProducts }) => {
                   type="file"
                   id="file-input"
                   accept=".jpg, .jpeg, .png"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                   onChange={handleFileChange}
                 />
                 <label htmlFor="file-input">
-                  <Button component="span" variant="outlined" sx={{ mr: 2 }} color="primary">
+                  <Button
+                    component="span"
+                    variant="outlined"
+                    sx={{ mr: 2 }}
+                    color="primary"
+                  >
                     Select File
                   </Button>
                 </label>
@@ -310,7 +464,11 @@ const HomePage = ({ getAllProducts }) => {
                   </Typography>
                 )}
                 {!selectedFile && (
-                  <Typography variant="body1" color="textSecondary" display="inline">
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    display="inline"
+                  >
                     No file selected
                   </Typography>
                 )}
@@ -318,29 +476,52 @@ const HomePage = ({ getAllProducts }) => {
             </Grid>
             <Grid container>
               <Grid item>
-                <TextField id="outlined-basic" required value={formdata.name} onChange={(e) => setformdata({ ...formdata, name: e.target.value })} sx={{ mr: 5 }} label="Name" variant="outlined" />
+                <TextField
+                  id="outlined-basic"
+                  required
+                  value={formdata.name}
+                  onChange={(e) =>
+                    setformdata({ ...formdata, name: e.target.value })
+                  }
+                  sx={{ mr: 5 }}
+                  label="Name"
+                  variant="outlined"
+                />
               </Grid>
               <Grid item>
-                <TextField id="outlined-basic" required value={formdata.price} onChange={(e) => setformdata({ ...formdata, price: e.target.value })} label="Price" variant="outlined" />
+                <TextField
+                  id="outlined-basic"
+                  required
+                  value={formdata.price}
+                  onChange={(e) =>
+                    setformdata({ ...formdata, price: e.target.value })
+                  }
+                  label="Price"
+                  variant="outlined"
+                />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button disabled={!selectedFile || !formdata.name || !formdata.price} autoFocus onClick={handleAddProduct}>
+            <Button
+              disabled={!selectedFile || !formdata.name || !formdata.price}
+              autoFocus
+              onClick={handleAddProduct}
+            >
               Add
             </Button>
           </DialogActions>
         </BootstrapDialog>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", mt: user && user.role === "seller" ? 0 : 9 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          mt: user && user.role === "seller" ? 0 : 9,
+        }}
+      >
         <Box sx={{ width: "100%" }}>
-          {outfitList.map((outfit, i) => (
-            <OutfitCard
-              outfitDetails={outfit.items}
-              outfitId={outfit.outfitId}
-              key={i}
-            />
-          ))}
+          {outfitList ? <OutfitCard outfitDetails={outfitList} /> : <></>}
         </Box>
       </Box>
     </>
@@ -350,7 +531,6 @@ const HomePage = ({ getAllProducts }) => {
 const mapActionsToProps = (dispatch) => {
   return {
     ...getMainActions(dispatch),
-    ...getAuthActions(dispatch),
   };
 };
 export default connect(null, mapActionsToProps)(HomePage);
