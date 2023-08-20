@@ -12,7 +12,7 @@ import { connect, useSelector } from "react-redux";
 import { getMainActions } from "../../app/actions/mainActions";
 const ClothCard = ({ item, addToCart }) => {
   const userInfo = useSelector((state) => state.user);
-  const label = { inputProps: { 'aria-label': 'Switch demo' } };
+  const label = { inputProps: { "aria-label": "Switch demo" } };
   const useStyles = styled({
     root: {
       maxWidth: 310,
@@ -31,10 +31,10 @@ const ClothCard = ({ item, addToCart }) => {
   const handleAddToCart = () => {
     const data = {
       productId: item.id,
-      op: 2
-    }
+      op: 2,
+    };
     addToCart(data);
-  }
+  };
 
   return (
     <Card
@@ -71,8 +71,12 @@ const ClothCard = ({ item, addToCart }) => {
         <CardContent style={{ margin: "0 15px", padding: "0" }}>
           <table style={{ width: "100%", margin: "auto 5px" }}>
             <tr>
-              <td><Typography variant="h5">Shirt</Typography></td>
-              <td align="right"><Typography variant="h6">$50</Typography></td>
+              <td>
+                <Typography variant="h5">Shirt</Typography>
+              </td>
+              <td align="right">
+                <Typography variant="h6">$50</Typography>
+              </td>
             </tr>
           </table>
         </CardContent>

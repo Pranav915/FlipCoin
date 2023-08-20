@@ -9,8 +9,8 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import LogoutIcon from '@mui/icons-material/Logout';
 import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
+import LogoutIcon from "@mui/icons-material/Logout";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import WalletIcon from "@mui/icons-material/Wallet";
@@ -104,6 +104,7 @@ export default function HomeNavbar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem style={{display: userinfo?.userDetails?.role==="seller"?"none":"block"}}>
+
         <IconButton
           size="large"
           aria-label="show 4 new mails"
@@ -116,9 +117,13 @@ export default function HomeNavbar() {
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <p onClick={() => {
+        <p
+          onClick={() => {
             navigate("/cart");
-          }}>Cart</p>
+          }}
+        >
+          Cart
+        </p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -134,9 +139,13 @@ export default function HomeNavbar() {
             <WalletIcon />
           </div>
         </IconButton>
-        <p onClick={() => {
-              navigate("/wallet");
-            }}>Wallet</p>
+        <p
+          onClick={() => {
+            navigate("/wallet");
+          }}
+        >
+          Wallet
+        </p>
       </MenuItem>
       <MenuItem onClick={logout}>
         <IconButton
@@ -184,6 +193,7 @@ export default function HomeNavbar() {
                 navigate("/cart");
               }}
               style={{display: userinfo?.userDetails?.role==="seller"?"none":"block"}}
+
             >
               <Badge badgeContent={4} color="error">
                 <ShoppingCartIcon />
