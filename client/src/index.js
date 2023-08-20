@@ -4,6 +4,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RegisterPage from "./components/auth/RegisterPage";
 import LoginPage from "./components/auth/LoginPage";
 import "./index.css";
+import EthProvider from "./shared/components/web3Reducer";
+import { ContractProvider } from "./components/ContractContext";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { configureStore, applyMiddleware } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
@@ -26,6 +28,8 @@ const persistConfig = {
   key: 'root',
   storage,
 }
+
+const contract = null;
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore(
@@ -74,8 +78,11 @@ const router = createBrowserRouter([
 root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <RouterProvider router={router}></RouterProvider>
-      <AlertNotification />
+      <ContractProvider contract={contract}>
+        <EthProvider />
+        <RouterProvider router={router}></RouterProvider>
+        <AlertNotification />
+      </ContractProvider>
     </PersistGate>
   </Provider>
 );
