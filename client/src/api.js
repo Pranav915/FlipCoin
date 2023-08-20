@@ -66,9 +66,66 @@ export const sellerRegister = async (data) => {
   }
 };
 
-export const getAllProducts = async (data) => {
+export const getAllProducts = async () => {
   try {
-    return await apiClient.post("/auth/", data);
+    return await apiClient.get("/main/getAllProducts");
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+export const getSellerProducts = async () => {
+  try {
+    return await apiClient.get("/main/getSellerProducts");
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+export const availLoyaltyProgram = async () => {
+  try {
+    return await apiClient.post("/main/availLoyaltyProgram");
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+export const addToCart = async (data) => {
+  try {
+    console.log(data);
+    return await apiClient.post("/main/addToCart", data);
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+export const addNewProduct = async (data) => {
+  try {
+    console.log(data);
+    return await apiClient.post("/main/addNewProduct", data);
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+export const getCart = async () => {
+  try {
+    return await apiClient.get("/main/getCart");
   } catch (exception) {
     return {
       error: true,

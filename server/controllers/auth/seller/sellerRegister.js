@@ -18,6 +18,7 @@ const sellerRegister = async (req, res) => {
       email: email,
       password: encryptedPassword,
       role: "seller",
+      availedLoyaltyProgram: false,
     });
 
     const token = jwt.sign(
@@ -26,6 +27,7 @@ const sellerRegister = async (req, res) => {
         email: user.email,
         sellerName: user.sellerName,
         role: "seller",
+        availedLoyaltyProgram: user.availedLoyaltyProgram,
       },
       process.env.AUTH_TOKEN,
       {
@@ -40,6 +42,7 @@ const sellerRegister = async (req, res) => {
         token: token,
         role: "seller",
         userId: user._id,
+        availedLoyaltyProgram: user.availedLoyaltyProgram,
       },
     });
   } catch (error) {

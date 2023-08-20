@@ -16,6 +16,7 @@ const sellerLogin = async (req, res) => {
           email: user.email,
           sellerName: user.sellerName,
           role: user.role,
+          availedLoyaltyProgram: user.availedLoyaltyProgram,
         },
         process.env.AUTH_TOKEN,
         {
@@ -29,6 +30,7 @@ const sellerLogin = async (req, res) => {
           sellerName: user.sellerName,
           role: user.role,
           _id: user._id,
+          availedLoyaltyProgram: user.availedLoyaltyProgram,
         },
       });
     } else if (user) {

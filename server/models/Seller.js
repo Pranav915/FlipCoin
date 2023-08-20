@@ -18,12 +18,9 @@ const sellerSchema = new Schema({
   role: {
     type: String,
   },
-  products: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
-    },
-  ],
+  availedLoyaltyProgram: {
+    type: Boolean,
+  },
 });
 
 module.exports = model("Seller", sellerSchema);
