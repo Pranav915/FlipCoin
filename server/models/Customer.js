@@ -20,30 +20,23 @@ const customerSchema = new Schema({
   role: {
     type: String,
   },
-  cart: {
-    products: [
-      {
-        seller: [
-          {
-            sellerId: {
-              type: String,
-            },
-            products: [
-              {
-                product: {
-                  type: Schema.Types.ObjectId,
-                  ref: "Product",
-                },
-                productCount: {
-                  type: String,
-                },
-              },
-            ],
-          },
-        ],
+  cart: [
+    {
+      sellerId: {
+        type: String,
       },
-    ],
-  },
+      products: [
+        {
+          productId: {
+            type: String,
+          },
+          productQt: {
+            type: Number,
+          },
+        },
+      ],
+    },
+  ],
   orders: [
     {
       type: Schema.Types.ObjectId,
