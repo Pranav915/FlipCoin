@@ -10,8 +10,10 @@ const {
 } = require("../controllers/main/seller/newProduct");
 const editLoyaltyProgram = require("../controllers/main/seller/editLoyaltyProgram");
 const getCart = require("../controllers/main/seller/getCart");
+const getSellerProducts = require("../controllers/main/getSellerProducts");
 
 router.get("/getAllProducts", auth, getAllProducts);
+router.get("/getSellerProducts", auth, getSellerProducts);
 router.get("/getCart", auth, getCart);
 router.post("/addToCart", auth, postAddToCart);
 router.post("/addNewProduct", auth, addNewProduct);
