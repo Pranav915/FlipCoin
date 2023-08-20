@@ -97,34 +97,8 @@ const ClothCard = ({ item, addToCart }) => {
           </table>
         </CardContent>
         <CardActions style={{ justifyContent: "center" }}>
-          <Button
-            style={{
-              display:
-                userInfo &&
-                userInfo.userDetails &&
-                userInfo.userDetails.role === "seller"
-                  ? "none"
-                  : "block",
-            }}
-            size="medium"
-            variant="text"
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </Button>
-          {/* <div
-            style={{
-              display:
-                userInfo &&
-                userInfo.userDetails &&
-                userInfo.userDetails.role !== "seller"
-                  ? "none"
-                  : "flex",
-            }}
-          >
-            <Typography>Avail Loyalty Program </Typography>
-            <Switch {...label} />
-          </div> */}
+          <Button style={{ display: (userInfo && userInfo.userDetails && userInfo.userDetails.role === "seller") ? "none" : "block" }} size="medium" variant="text">Add to Cart</Button>
+          <div style={{ display: (userInfo && userInfo.userDetails && userInfo.userDetails.role !== "seller") ? "none" : "flex" }}><Typography>Avail Loyalty Program </Typography><Switch {...label} /></div>
         </CardActions>
       </Box>
     </Card>

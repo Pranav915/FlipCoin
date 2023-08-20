@@ -103,7 +103,7 @@ export default function HomeNavbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem style={{display: userinfo?.userDetails?.role==="seller"?"none":"block"}}>
+      <MenuItem style={{display: userinfo && userinfo.userDetails && userinfo.userDetails.role==="seller"?"none":"block"}}>
 
         <IconButton
           size="large"
@@ -192,8 +192,7 @@ export default function HomeNavbar() {
               onClick={() => {
                 navigate("/cart");
               }}
-              style={{display: userinfo?.userDetails?.role==="seller"?"none":"block"}}
-
+              style={{display: userinfo && userinfo.userDetails && userinfo.userDetails.role==="seller"?"none":"block"}}
             >
               <Badge badgeContent={4} color="error">
                 <ShoppingCartIcon />
