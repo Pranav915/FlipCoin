@@ -1,7 +1,6 @@
 const User = require("../../../models/Customer");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Cart = require("../../../models/Cart");
 
 const postRegister = async (req, res) => {
   try {

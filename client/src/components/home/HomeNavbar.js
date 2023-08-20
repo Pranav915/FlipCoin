@@ -9,7 +9,7 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
@@ -104,7 +104,16 @@ export default function HomeNavbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem style={{display: userinfo && userinfo.userDetails.role==="seller"?"none":"block"}}>
+      <MenuItem
+        style={{
+          display:
+            userinfo &&
+            userinfo.userDetails &&
+            userinfo.userDetails.role === "seller"
+              ? "none"
+              : "block",
+        }}
+      >
         <IconButton
           size="large"
           aria-label="show 4 new mails"
@@ -117,9 +126,13 @@ export default function HomeNavbar() {
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <p onClick={() => {
+        <p
+          onClick={() => {
             navigate("/cart");
-          }}>Cart</p>
+          }}
+        >
+          Cart
+        </p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -135,9 +148,13 @@ export default function HomeNavbar() {
             <WalletIcon />
           </div>
         </IconButton>
-        <p onClick={() => {
-              navigate("/wallet");
-            }}>Wallet</p>
+        <p
+          onClick={() => {
+            navigate("/wallet");
+          }}
+        >
+          Wallet
+        </p>
       </MenuItem>
       <MenuItem onClick={logout}>
         <IconButton
@@ -193,7 +210,14 @@ export default function HomeNavbar() {
               onClick={() => {
                 navigate("/cart");
               }}
-              style={{display: userinfo && userinfo.userDetails.role==="seller"?"none":"block"}}
+              style={{
+                display:
+                  userinfo &&
+                  userinfo.userDetails &&
+                  userinfo.userDetails.role === "seller"
+                    ? "none"
+                    : "block",
+              }}
             >
               <Badge badgeContent={4} color="error">
                 <ShoppingCartIcon />
