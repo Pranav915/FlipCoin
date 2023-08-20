@@ -66,9 +66,21 @@ export const sellerRegister = async (data) => {
   }
 };
 
-export const getAllProducts = async (data) => {
+export const getAllProducts = async () => {
   try {
-    return await apiClient.post("/auth/", data);
+    return await apiClient.get("/main/getAllProducts");
+  } catch (exception) {
+    return {
+      error: true,
+      exception,
+    };
+  }
+};
+
+export const addToCart = async (data) => {
+  try {
+    console.log(data);
+    return await apiClient.post("/main/addToCart", data);
   } catch (exception) {
     return {
       error: true,

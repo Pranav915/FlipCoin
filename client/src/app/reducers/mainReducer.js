@@ -1,16 +1,15 @@
 import { mainActions } from "../actions/mainActions";
 
 const initState = {
-  isChatOpen: false,
-  outfitList: null,
+  productList: [],
 };
 
 const mainReducer = (state = initState, action) => {
   switch (action.type) {
-    case mainActions.GET_ALL_SUGGESTIONS:
+    case mainActions.SET_PRODUCT_LIST:
       return {
         ...state,
-        outfitList: action.outfitList,
+        productList: action.productList,
       };
 
     default:

@@ -6,8 +6,9 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box, Switch, styled } from "@mui/material";
-import { useSelector } from "react-redux";
-const ClothCard = ({ item }) => {
+import { connect, useSelector } from "react-redux";
+import { getMainActions } from "../../app/actions/mainActions";
+const ClothCard = ({ item, addToCart }) => {
   const userInfo = useSelector((state) => state.user);
   const label = { inputProps: { 'aria-label': 'Switch demo' } };
   const useStyles = styled({
@@ -24,6 +25,14 @@ const ClothCard = ({ item }) => {
     raised: false,
     shadow: 1,
   });
+
+  const handleAddToCart = () => {
+    const data = {
+      productId:item.id,
+      op:2
+    }
+    addToCart(data);
+  }
 
   return (
     <Card
@@ -50,7 +59,7 @@ const ClothCard = ({ item }) => {
           </table>
         </CardContent>
         <CardActions style={{ justifyContent: "center" }}>
-          <Button style={{ display: (userInfo && userInfo.userDetails.role === "seller") ? "none" : "block" }} size="medium" variant="text">Add to Cart</Button>
+          <Button style={{ display: (userInfo && userInfo.userDetails.role === "seller") ? "none" : "block" }} size="medium" variant="text" onClick={handleAddToCart}>Add to Cart</Button>
           <div style={{ display: (userInfo && userInfo.userDetails.role !== "seller") ? "none" : "flex" }}><Typography>Avail Loyalty Program </Typography><Switch {...label} /></div>
         </CardActions>
       </Box>
@@ -58,4 +67,9 @@ const ClothCard = ({ item }) => {
   );
 };
 
-export default ClothCard;
+const mapActionsToProps = (dispatch) => {
+  return {
+    ...getMainActions(dispatch),
+  };
+};
+export default connect(null, mapActionsToProps)(ClothCard);

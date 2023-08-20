@@ -1,14 +1,49 @@
 import { Button, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import { getMainActions } from "../../app/actions/mainActions";
+import { connect } from "react-redux";
 
-const CartCard = ({ item, changeCount, removeItem }) => {
+const CartCard = ({ item, changeCount,removeItem, addToCart }) => {
+
+    const incItem = async () => {
+        const data = {
+            productId:item.id,
+            op:1
+        }
+        const res = await addToCart(data);
+            if(res?.success){
+                changeCount(item.id, "increase");
+            }
+    }
+    const decItem = async () => {
+        const data = {
+            productId:item.id,
+            op:0
+        }
+        const res = await addToCart(data);
+            if(res?.success){
+                changeCount(item.id, "decrease");
+            }
+    }
+    const deleteItem = async () => {
+            const data = {
+                productId:item.id,
+                op:-1
+            }
+            const res = await addToCart(data);
+            if(res?.success){
+                removeItem(item.id);
+            }
+    }
+
+
     return (
         <Box sx={{ display: "flex", fontFamily: "Arial, Helvetica, sans-serif", paddingBottom: "20px" }}>
             <div style={{ flex: "1" }}>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <h3>{item.name}</h3>
-                    <div style={{margin: "15px 5px 0px 0px"}}><IconButton onClick={() => removeItem(item.id)} aria-label="delete">
+                    <div style={{margin: "15px 5px 0px 0px"}}><IconButton onClick={deleteItem} aria-label="delete">
                         <DeleteIcon />
                     </IconButton></div>
                 </div>
@@ -25,7 +60,7 @@ const CartCard = ({ item, changeCount, removeItem }) => {
                         size="large"
                         disableElevation
                         variant="contained"
-                        onClick={() => { changeCount(item.id, "decrease") }}
+                        onClick={decItem}
                     >
                         -
                     </Button>
@@ -34,7 +69,7 @@ const CartCard = ({ item, changeCount, removeItem }) => {
                         size="large"
                         disableElevation
                         variant="contained"
-                        onClick={() => { changeCount(item.id, "increase") }}
+                        onClick={incItem}
                     >
                         +
                     </Button>
@@ -49,4 +84,9 @@ const CartCard = ({ item, changeCount, removeItem }) => {
     );
 };
 
-export default CartCard;
+const mapActionsToProps = (dispatch) => {
+    return {
+      ...getMainActions(dispatch),
+    };
+  };
+  export default connect(null, mapActionsToProps)(CartCard);
