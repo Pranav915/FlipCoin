@@ -4,8 +4,10 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 import Typography from "@mui/material/Typography";
-import { Box, Switch, styled } from "@mui/material";
+import { Box, Switch, styled, IconButton } from "@mui/material";
 import { connect, useSelector } from "react-redux";
 import { getMainActions } from "../../app/actions/mainActions";
 const ClothCard = ({ item, addToCart }) => {
@@ -43,13 +45,29 @@ const ClothCard = ({ item, addToCart }) => {
       raised={state.raised}
       zdepth={state.shadow}
     >
-      <Box>
+      <Box position="relative">
         <CardMedia
           component="img"
           alt="green iguana"
           height="260"
           image={item.itemImage}
         />
+        <IconButton style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          backgroundColor: '90% transparent',
+        }}>
+          <CloseIcon sx={{ color: "black" }} />
+        </IconButton>
+        <IconButton style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          backgroundColor: '80% transparent',
+        }}>
+          <EditIcon sx={{ color: "black" }} />
+        </IconButton>
         <CardContent style={{ margin: "0 15px", padding: "0" }}>
           <table style={{ width: "100%", margin: "auto 5px" }}>
             <tr>
@@ -63,34 +81,8 @@ const ClothCard = ({ item, addToCart }) => {
           </table>
         </CardContent>
         <CardActions style={{ justifyContent: "center" }}>
-          <Button
-            style={{
-              display:
-                userInfo &&
-                userInfo.userDetails &&
-                userInfo.userDetails.role === "seller"
-                  ? "none"
-                  : "block",
-            }}
-            size="medium"
-            variant="text"
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </Button>
-          <div
-            style={{
-              display:
-                userInfo &&
-                userInfo.userDetails &&
-                userInfo.userDetails.role !== "seller"
-                  ? "none"
-                  : "flex",
-            }}
-          >
-            <Typography>Avail Loyalty Program </Typography>
-            <Switch {...label} />
-          </div>
+          <Button style={{ display: (userInfo && userInfo.userDetails && userInfo.userDetails.role === "seller") ? "none" : "block" }} size="medium" variant="text" onClick={handleAddToCart}>Add to Cart</Button>
+          <div style={{ display: (userInfo && userInfo.userDetails && userInfo.userDetails.role !== "seller") ? "none" : "flex" }}><Typography>Avail Loyalty Program </Typography><Switch {...label} /></div>
         </CardActions>
       </Box>
     </Card>

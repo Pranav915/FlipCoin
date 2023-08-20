@@ -9,9 +9,8 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
 import LogoutIcon from "@mui/icons-material/Logout";
-import SearchIcon from "@mui/icons-material/Search";
-import MenuIcon from "@mui/icons-material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import WalletIcon from "@mui/icons-material/Wallet";
@@ -104,16 +103,8 @@ export default function HomeNavbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem
-        style={{
-          display:
-            userinfo &&
-            userinfo.userDetails &&
-            userinfo.userDetails.role === "seller"
-              ? "none"
-              : "block",
-        }}
-      >
+      <MenuItem style={{display: userinfo?.userDetails?.role==="seller"?"none":"block"}}>
+
         <IconButton
           size="large"
           aria-label="show 4 new mails"
@@ -180,27 +171,18 @@ export default function HomeNavbar() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{ mr: 1 }}
           >
-            <MenuIcon />
+            <CurrencyBitcoinIcon sx={{fontSize: "1.2em"}} />
           </IconButton>
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            FlipCoin  
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
@@ -210,14 +192,8 @@ export default function HomeNavbar() {
               onClick={() => {
                 navigate("/cart");
               }}
-              style={{
-                display:
-                  userinfo &&
-                  userinfo.userDetails &&
-                  userinfo.userDetails.role === "seller"
-                    ? "none"
-                    : "block",
-              }}
+              style={{display: userinfo?.userDetails?.role==="seller"?"none":"block"}}
+
             >
               <Badge badgeContent={4} color="error">
                 <ShoppingCartIcon />
